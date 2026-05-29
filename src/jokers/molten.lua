@@ -5,7 +5,7 @@ SMODS.Joker {
 
     config = { 
         extra = { 
-            dollars = 8 
+            dollars = 6 
         } 
     },
 
@@ -13,6 +13,8 @@ SMODS.Joker {
     cost = 7,
 
     blueprint_compat = false,
+    unlocked = true,
+    discovered = true,
 
     loc_vars = function(self, info_queue, card)
         return {vars = {card.ability.extra.dollars} }
@@ -20,21 +22,25 @@ SMODS.Joker {
 
 
     calculate = function(self, card, context)
-        if context.individual and context.cardarea == G.play and (SMODS.has_enhancement(context.other_card, 'm_gold') or SMODS.has_enhancement(context.other_card, 'm_steel')) then
-            G.GAME.dollar_buffer = (G.GAME.dollar_buffer or 0) + card.ability.extra.dollars
+        if context.individual and context.cardarea == G.play and not context.blueprint and
+        (SMODS.has_enhancement(context.other_card, 'm_gold') or SMODS.has_enhancement(context.other_card, 'm_steel')) then
             return {
                 dollars = card.ability.extra.dollars,
-                func = function ()
-                    G.E_MANAGER:add_event(Event({
-                        trigger = "after",
-                        func = function()
-                            context.card:set_ability(G.P_CENTERS["m_stone"])
-                            return true
-                        end
-                    }))
-                    return true
-                end
             }
+        end
+
+        -- code pour si on veut après le scoring, probleme avec si on fait après,
+        -- il peut y avoir plusieurs proc d'argent
+        if context.after and not context.blueprint then
+            for i = 1,#context.scoring_hand,1 do
+                if SMODS.has_enhancement(context.scoring_hand[i], 'm_gold') or SMODS.has_enhancement(context.scoring_hand[i], 'm_steel') then
+                    context.scoring_hand[i]:set_ability(G.P_CENTERS["m_stone"],false,1)
+                    return{
+                        message_card = context.scoring_hand[i],
+                        message="Melts.."
+                    }
+                end
+            end
         end
     end
 

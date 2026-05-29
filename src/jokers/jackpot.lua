@@ -38,16 +38,18 @@ SMODS.Joker {
                     n_sevens = n_sevens + 1
                 end
             end
-            if n_sevens >= 3 and SMODS.pseudorandom_probability(card, "jackpot", 1, card.ability.extra.odds) then 
-                return {
-                    message = 'Jackpot!',
-                    x_mult = card.ability.extra.xmult,
-                    dollars = card.ability.extra.dollars
-                }
-            else 
-                return {
-                    message = 'Nope!'
-                }
+            if n_sevens >= 3 then 
+                if SMODS.pseudorandom_probability(card, "jackpot", 1, card.ability.extra.odds) then 
+                    return {
+                        message = 'Jackpot!',
+                        x_mult = card.ability.extra.xmult,
+                        dollars = card.ability.extra.dollars
+                    }
+                else 
+                    return {
+                        message = 'Nope!'
+                    }
+                end
             end
         end
     end

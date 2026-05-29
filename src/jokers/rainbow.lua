@@ -11,6 +11,9 @@ SMODS.Joker {
 
     rarity = 3,
     cost = 7,
+    
+    unlocked = true,
+    discovered = true,
 
     loc_vars = function(self, info_queue, card)
         return { vars = { card.ability.extra.xmult } }

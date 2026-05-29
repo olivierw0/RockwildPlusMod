@@ -14,6 +14,8 @@ SMODS.Joker {
     cost = 5,
 
     perishable_compat = false,
+    unlocked = true,
+    discovered = true,
 
     loc_vars = function(self,info_queue,card)
         return{
@@ -28,7 +30,8 @@ SMODS.Joker {
         if context.change_suit then
             card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
             return {
-                message = localize('k_upgrade_ex'),
+                message_card = card,
+                message = "Grows!",
                 colour = G.C.MULT
             }
         end
