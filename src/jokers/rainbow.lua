@@ -35,5 +35,15 @@ SMODS.Joker {
                 }
             end
         end
+    end,
+
+    in_pool = function(self, args) 
+        local cpt = 0
+        for _, playing_card in ipairs(G.playing_cards or {}) do
+            if SMODS.has_enhancement(playing_card, 'm_wild') then
+                cpt = cpt + 1
+            end
+        end
+        if cpt>=5 then return true else return false end
     end
 }

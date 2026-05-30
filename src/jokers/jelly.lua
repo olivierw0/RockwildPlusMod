@@ -5,7 +5,7 @@ SMODS.Joker {
 
     config = {
         extra = {
-            base = 1,
+            base = 2,
         }
     },
 
@@ -28,7 +28,7 @@ SMODS.Joker {
             if not context.blueprint then 
                 card.ability.extra.base = card.ability.extra.base - 1
             end
-            local booster = SMODS.add_booster_to_shop('p_spectral_jumbo_1')
+            local booster = SMODS.add_booster_to_shop('p_spectral_normal_1')
             booster.ability.couponed = true
             booster:set_cost()
 

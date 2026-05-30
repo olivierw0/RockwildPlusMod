@@ -5,7 +5,7 @@ SMODS.Joker{
 
     config = {
         extra = {
-            cards_left = 12,
+            cards_left = 7,
             reps = 1
         }
     },
@@ -43,5 +43,14 @@ SMODS.Joker{
                 }
             end
         end
+    end,
+
+    in_pool = function(self, args) 
+        for _, playing_card in ipairs(G.playing_cards or {}) do
+            if SMODS.has_enhancement(playing_card, 'm_glass') then
+                return true
+            end
+        end
+        return false
     end
 }

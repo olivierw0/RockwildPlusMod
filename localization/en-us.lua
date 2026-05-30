@@ -78,7 +78,7 @@ return{
             j_whiteem_jelly = {
                 name = "Eerie Jelly",
                 text = {
-                    "Adds 1 free {C:attention}Jumbo Spectral Pack",
+                    "Adds 1 free {C:attention}Spectral Pack",
                     "at start of shop", 
                     "{C:inactive}({C:attention}#1#{} {C:inactive}rounds remaining)",
                 }
