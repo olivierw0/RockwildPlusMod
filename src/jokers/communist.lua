@@ -2,20 +2,20 @@ SMODS.Joker{
     key = 'communist',
     atlas = 'wjokers',
 
-    pos = { x = 0, y = 0},
+    pos = { x = 0, y = 3},
 
     config = {
         extra = {
+            mult = 17,
             consumable_slot = -1,
-            mult = 17
         }
     },
 
     loc_txt = {
         ['name'] = 'Communist Joker',
         ['text'] = {
-            [1] = '{C:red}#1#{} consumable slot',
-            [2] = '{C:mult}+#2#{} Mult',
+            '{C:mult}+#1#{} Mult',
+            '{C:red}#2#{} consumable slot',
         }
     },
 

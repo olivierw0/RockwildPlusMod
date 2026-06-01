@@ -19,7 +19,7 @@ SMODS.Joker {
     },
 
     rarity = 2,
-    cost = 5,
+    cost = 6,
 
     eternal_compat=false,
     unlocked = true,

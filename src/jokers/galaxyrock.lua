@@ -1,7 +1,7 @@
 SMODS.Joker {
-    key = 'galaxy',
+    key = 'galaxyrock',
     atlas = 'wjokers',
-    loc = { x = 0, y = 0},
+    pos = { x = 3, y = 3},
 
     loc_txt = {
         ['name'] = "Galaxy Rock",
