@@ -1,12 +1,13 @@
 SMODS.ConsumableType{
     key = 'uno',
-    default = 'wild4',
+    default = 'reverse',
     primary_colour = G.C.RED,
     secondary_colour = G.C.BLACK,
     collection_rows = { 3, 4 },
     shop_rate = 0
 }
 
+-- +2 Card
 SMODS.Consumable{
     key = 'plus_two',
     set = 'uno',
@@ -111,11 +112,12 @@ SMODS.Consumable{
     end,
 }
 
+-- Reverse Card
 SMODS.Consumable{
     key = 'reverse',
     set = 'uno',
     atlas = 'others',
-    pos = {x = 0, y=0},
+    pos = {x = 1, y=0},
 
     unlocked = true,
     discovered = true,
@@ -241,14 +243,14 @@ SMODS.Consumable{
         add_tag({key = random_key})
         local _tag = G.GAME.tags[#G.GAME.tags]
 
-        if _tag then 
-            if _tag.config.type == 'immediate' then 
-                _tag:apply_to_run({type = 'immediate'})
-            end
+        if _tag and _tag.config.type == 'immediate' then 
+            _tag:apply_to_run({type = 'immediate'})
         end
+        
     end
 }
 
+-- Wild Card
 SMODS.Consumable{
     key = 'wild',
     set = 'uno',
@@ -288,10 +290,28 @@ SMODS.Consumable{
     end,
 
     use = function (self,card,area,copier)
+        local _hands = {}
+        local hand_list = {}
         
+        -- Single loop to collect all hands with their play counts
+        for hand_key, hand in pairs(G.GAME.hands) do
+            table.insert(hand_list, {key = hand_key, played = hand.played})
+        end
+        
+        -- Sort by play count (highest first)
+        table.sort(hand_list, function(a, b) return a.played > b.played end)
+        
+        -- Take the top N hands
+        for i = 1, math.min(card.ability.extra.number, #hand_list) do
+            table.insert(_hands, hand_list[i].key)
+        end
+        
+        print('hands :', _hands)
+        SMODS.upgrade_poker_hands({hands=_hands, level_up=card.ability.extra.level, from = card})
     end
 }
 
+-- Wild 4 Card
 SMODS.Consumable{
     key = 'wild4',
     set = 'uno',
