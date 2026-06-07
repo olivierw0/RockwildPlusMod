@@ -5,45 +5,42 @@ SMODS.Joker {
 
     config = {
         extra = {
-            type = 'Flush'
+            xmult = 1.5
         }
     },
 
     loc_txt = {
         ['name'] = 'Welcome to the Jungle',
         ['text'] = {
-            "If played hand contains",
-            "a {C:attention}#1#{} and a {C:attention}Wild Card{}",
-            "level up the poker hand played",
+            "Played {C:attention}Wild Cards{}",
+            "gives {X:mult,C:white} X#1# {} Mult",
+            "when scored",
         }
     },
     
-    rarity = 2, 
-    cost = 7,
+    rarity = 3, 
+    cost = 8,
     
     unlocked = true,
     discovered = true,
 
     loc_vars = function (self,info_queue,card)
         info_queue[#info_queue+1] = G.P_CENTERS.m_wild
+
         return {
             vars = {
-                localize(card.ability.extra.type, 'poker_hands')
+                card.ability.extra.xmult
             }
-        }
+        }        
     end,
 
 
     calculate = function(self,card,context)
-        if context.before and next(context.poker_hands[card.ability.extra.type]) then 
-            for i= #context.scoring_hand, 1, -1 do
-                if SMODS.has_enhancement(context.scoring_hand[i],"m_wild") then
-                    return {
-                        level_up = true,
-                        message = localize('k_level_up_ex')
-                    }
-                end
-            end
+        if context.individual and context.cardarea == G.play 
+        and SMODS.has_enhancement(context.other_card,'m_wild') then 
+            return {
+                xmult = card.ability.extra.xmult
+            }
         end
     end,
 
