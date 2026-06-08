@@ -231,23 +231,26 @@ SMODS.Consumable{
     end,
 
     use = function (self, card, area, copier)
-        local counter = 0
-        local random_key = nil
+        -- local counter = 0
+        -- local random_key = nil
         
-        for key, _ in pairs(G.P_TAGS) do
-            counter = counter + 1
-            -- 1 in counter chance to pick the current key
-            if math.random(1, counter) == 1 then
-                random_key = key
-            end
-        end
-        add_tag({key = random_key})
-        local _tag = G.GAME.tags[#G.GAME.tags]
+        -- for key, _ in pairs(G.P_TAGS) do
+        --     counter = counter + 1
+        --     -- 1 in counter chance to pick the current key
+        --     if math.random(1, counter) == 1 then
+        --         random_key = key
+        --     end
+        -- end
+        -- add_tag({key = random_key})
 
-        if _tag and _tag.config.type == 'immediate' then 
-            _tag:apply_to_run({type = 'immediate'})
+        local tag_pool = get_current_pool('Tag')
+        local selected_tag = pseudorandom_element(tag_pool, 'whiteem')
+        local it = 1
+        while selected_tag == 'UNAVAILABLE' do
+            it = it + 1
+            selected_tag = pseudorandom_element(tag_pool, 'whiteem' .. it)
         end
-        
+        add_tag(Tag(selected_tag, false, 'Small'))
     end
 }
 

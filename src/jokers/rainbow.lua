@@ -13,7 +13,7 @@ SMODS.Joker {
         ['name'] = "ROYGBIV",
         ['text'] = {
             "{X:mult,C:white} X#1# {} Mult if played",
-            "hand cointains 5 {C:attention}Wild Cards{}",
+            "hand cointains {C:attention}5 Wild Cards{}",
         }
     },
 
