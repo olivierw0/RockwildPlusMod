@@ -1,26 +1,22 @@
 SMODS.Joker {
     key = 'philosopher',
     atlas = 'wjokers',
-    pos = { x = 0, y = 0 },
-
-    loc_txt = {
-        ['name'] = "Philosopher's Stone",
-        ['text'] = {
-            "{C:attention}Stone Cards{} are also",
-            "considered {C:attention}Gold Cards{}",
-        }
-    },
+    pos = { x = 5, y = 1 },
 
     rarity = 1, 
-    cost = 4,
+    cost = 3,
     
     blueprint_compat = false,
     
     unlocked = true,
     discovered = true,
 
+    loc_vars = function (self, info_queue, card)
+        info_queue[#info_queue+1] = G.P_CENTERS.m_stone
+    end,
+
     calculate = function(self, card, context)
-        if context.check_enhancement and SMODS.get_enhancements(context.other_card,'m_stone') then
+        if context.check_enhancement and context.other_card.config.center_key == 'm_stone' then
             return {m_gold = true}
         end
     end,

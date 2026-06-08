@@ -5,7 +5,7 @@ return{
                 ['name'] = 'Big Rock',
                 ['text'] = {
                     "If played hand is {C:attention}5 Stone Cards",
-                    "{C:attention}win{} the round, {C:attention}destroy{} them",
+                    "{S:1.1,C:attention}win{} the round, {C:attention}destroy{} them",
                     "{C:green}#1# in #2#{} chance to {S:1.1,C:red,E:2}self-destruct{}",
                 }
             },
@@ -128,17 +128,17 @@ return{
                 ['name'] = "Medusa",
                 ['text'] = {
                     "The {C:attention}first time{} that a played hand",
-                    "contains a {C:attention}Queen{} and",
+                    "contains a scoring {C:attention}Queen{} and",
                     "a single {C:attention}unscored{} card",
                     "turn it into a {C:attention}Stone Card",
                 }
             },
-            j_whiteem_melting ={
+            j_whiteem_melting = {
                 ['name'] = 'Melting Joker',
                 ['text'] = {
-                    "This Joker gives {C:money}$#1#{} per scoring",
-                    "{C:attention}Steel{} or {C:attention}Gold Card{} played",
-                    "and turn them into {C:attention}Stone Card{}",
+                    "Played {C:attention}Steel{} or {C:attention}Gold Card",
+                    "gives {C:money}$#1#{} when scored and",
+                    "turn into {C:attention}Stone Card{}",
                 }
             },
             j_whiteem_old = {
@@ -194,6 +194,20 @@ return{
                     "{V:1}#2#{} suit give",
                     "{C:chips}+#1#{} Chips when scored",
                     "{s:0.8}suit changes at end of round"
+                }
+            },
+            j_whiteem_philosopher = {
+                ['name'] = "Philosopher's Stone",
+                ['text'] = {
+                    "{C:attention}Stone Cards{} are also",
+                    "considered {C:attention}Gold Cards{}",
+                }
+            },
+            j_whiteem_paintedrock = {
+                ['name'] = "Painted Rock",
+                ['text'] = {
+                    "{C:attention}Stone Cards{} are also",
+                    "considered {C:attention}Wild Cards{}",
                 }
             },
         }

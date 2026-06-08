@@ -28,7 +28,7 @@ SMODS.Joker{
 
     calculate = function(self,card,context)
         if context.repetition and context.cardarea == G.play 
-        and context.other_card.config.center_key == 'm_glass' and
+        and SMODS.has_enhancement(context.other_card, 'm_glass') and
         card.ability.extra.cards_left > 0 then
             card.ability.extra.cards_left = card.ability.extra.cards_left - 1
             return {

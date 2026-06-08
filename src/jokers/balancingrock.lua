@@ -29,7 +29,6 @@ SMODS.Joker {
     calculate = function(self,card,context)
         if context.before then
             local reset = true
-            print("scoring hand : ",context.scoring_hand)
             for _, v in ipairs(context.scoring_hand) do 
                 if SMODS.has_enhancement(v,'m_stone') and not v.debuff then
                     reset = false
@@ -40,11 +39,14 @@ SMODS.Joker {
             if reset then
                 card.ability.extra.xmult = 1
                 return{
-                    message = localize('k_reset')
+                    -- add sfx rock falling
+                    message = localize('k_reset'),
+                    colour = HEX("808080")
                 }
             else
                 card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.xmult_gain
                 return{
+                    -- add a SFX zen
                     message = 'Balacing...',
                     colour = HEX("808080")
                 }

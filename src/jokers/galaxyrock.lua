@@ -16,7 +16,7 @@ SMODS.Joker {
     blueprint_compat=false,
 
     calculate = function(self,card,context)
-        if context.destroy_card and not context.blueprint then
+        if (SMODS.find_card(self.key)[1] == card) and context.destroy_card and not context.blueprint then
             if #context.full_hand == 1 and context.destroy_card == context.full_hand[1] and SMODS.has_enhancement(context.full_hand[1], 'm_stone') then
                 if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
                     G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1

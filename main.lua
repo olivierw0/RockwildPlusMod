@@ -15,6 +15,10 @@ SMODS.Atlas {
 }
 --#endregion 
 
+SMODS.current_mod.optional_features = {
+    quantum_enhancements = true,
+}
+
 --#region File Loading
 local mod = SMODS.current_mod
 
