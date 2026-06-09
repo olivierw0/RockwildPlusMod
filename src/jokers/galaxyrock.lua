@@ -12,6 +12,7 @@ SMODS.Joker {
 
     unlocked = true,
     discovered = true,
+    enhancement_gate = 'm_stone',
 
     blueprint_compat=false,
 
@@ -47,14 +48,4 @@ SMODS.Joker {
             end
         end
     end,
-
-    in_pool = function(self, args) 
-        for _, playing_card in ipairs(G.playing_cards or {}) do
-            if SMODS.has_enhancement(playing_card, 'm_stone') then
-                return true
-            end
-        end
-        return false
-    end
-
 }

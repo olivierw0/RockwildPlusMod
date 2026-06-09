@@ -2,7 +2,7 @@ return{
     descriptions = {
         Joker = {
             j_whiteem_bigrock ={
-                ['name'] = 'Big Rock',
+                ['name'] = 'Josetta Stone',
                 ['text'] = {
                     "If played hand is {C:attention}5 Stone Cards",
                     "{S:1.1,C:attention}win{} the round, {C:attention}destroy{} them",
@@ -27,7 +27,7 @@ return{
                 }
             },
             j_whiteem_balancingrock ={
-                    ['name'] = 'Rock Balancing',
+                    ['name'] = 'Sisyphus',
                     ['text']= {
                         "Gains {X:mult,C:white} X#1# {} Mult when a hand",
                         "is played with a {C:attention}Stone Card{} in it",
@@ -70,7 +70,7 @@ return{
                 ['text'] = {
                     "Once per round, creates a copy of",
                     "{C:attention}1{} random {C:attention}consumable{} in your",
-                    "possession if hand played is {C:attention}#1#{},",
+                    "possession if {C:attention}poker hand{} is a {C:attention}#1#{},",
                     "{s:0.8}poker hand changes each round",
                     "{C:inactive}(Must have room)"
                 }
@@ -108,12 +108,13 @@ return{
                 }
             },
             j_whiteem_lucky7 = {
-                ['name'] = "Lucky 7",
+                ['name'] = "7",
                 ['text'] = {
                     "Played {C:attention}7s{} gives {C:money}$#1#",
-                    "and {X:mult,C:white}X#2#{} Mult",
-                    "{C:green}#3# in #4#{} chance to gain",
-                    "{C:money}$#5#{} if a {C:attention}7{} scored",
+                    "and {X:mult,C:white}X#2#{} Mult,",
+                    "when {C:attention}#3#{} have been",
+                    "played gain {C:money}$#4#{}",
+                    "{C:inactive}(Currently #5#/#3# Sevens){}",
                 }
             },
             j_whiteem_mathcorrect = {
@@ -208,6 +209,15 @@ return{
                 ['text'] = {
                     "{C:attention}Stone Cards{} are also",
                     "considered {C:attention}Wild Cards{}",
+                }
+            },
+            j_whiteem_jobapplication = {
+                ['name'] = "Joker Application",
+                ['text'] = {
+                    "Gains {C:money}$#1#{} of {C:attention}sell value{} if",
+                    "{C:attention}poker hand{} is a {C:attention}#2#{},",
+                    "resets if not played,",
+                    "{s:0.8}poker hand changes every hand",
                 }
             },
         }

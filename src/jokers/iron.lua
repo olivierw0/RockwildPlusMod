@@ -15,6 +15,7 @@ SMODS.Joker {
     
     unlocked = true,
     discovered = true,
+    enhancement_gate = 'm_steel',
 
     loc_vars = function(self, info_queue, card)
         info_queue[#info_queue+1] = G.P_CENTERS.m_steel
@@ -30,13 +31,4 @@ SMODS.Joker {
             }
         end
     end,
-
-    in_pool = function(self, args) 
-        for _, playing_card in ipairs(G.playing_cards or {}) do
-            if SMODS.has_enhancement(playing_card, 'm_steel') then
-                return true
-            end
-        end
-        return false
-    end
 }

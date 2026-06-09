@@ -14,6 +14,7 @@ SMODS.Joker {
     
     unlocked = true,
     discovered = true,
+    eternal_compat = false,
 
     blueprint_compat = false,
 
@@ -47,13 +48,18 @@ SMODS.Joker {
             G.E_MANAGER:add_event(Event({
                 func = function()
                     if SMODS.pseudorandom_probability(card, "caillou", 1, card.ability.extra.odds) then
+                        -- SFX Rock breaking
+                        SMODS.calculate_effect({message = "Break!", colour = HEX("808080")}, card)
                         SMODS.destroy_cards(card)
+                    else
+                        SMODS.calculate_effect({message = "Keep Mining!", colour = HEX("808080")}, card)
                     end
                     return true
                 end
             }))
             
             return {
+                --SFX Rock Smashing the ground
                 message = 'CRUSHED!',
                 colour = HEX('808080')
             }
@@ -61,11 +67,12 @@ SMODS.Joker {
     end,
 
     in_pool = function(self, args) 
+        local stone_cpt = 0
         for _, playing_card in ipairs(G.playing_cards or {}) do
             if SMODS.has_enhancement(playing_card, 'm_stone') then
-                return true
+                stone_cpt = stone_cpt + 1
             end
         end
-        return false
+        if stone_cpt >= 5 then return true else return false end
     end
 }
