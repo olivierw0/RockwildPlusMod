@@ -5,10 +5,10 @@ SMODS.Booster ({
     kind = 'whiteem_Uno',
     group_key = "p_uno_pack",
     pos = { x = 2, y = 1 },
-    config = { extra = 2, choose = 1 },
+    config = { extra = 3, choose = 1, uno = false },
 
-    cost = 5,
-    weight = 0.75,
+    cost = 4,
+    weight = 0.8,
     draw_hand = true,
 
     discovered = true,
@@ -19,7 +19,8 @@ SMODS.Booster ({
         ['text']={
             "Choose {C:attention}#1#{} of up to",
             "{C:attention}#2# {C:mult}Uno{} cards to",
-            "be used immediately",
+            "be used immediately or {C:attention}Playing{} cards",
+            "to add to your deck",
         },
     },
     
@@ -53,7 +54,23 @@ SMODS.Booster ({
     end,
     
     create_card = function(self, card, i)
-        return create_card('Uno', G.pack_card,nil,nil,true,true,nil,'whiteem_Uno')
+        local card_
+        --1/2 to have a uno card then 1/8 if there's already one
+        if not card.ability.uno then 
+            if pseudorandom('uno') > 0.5 then
+                card.ability.uno = true
+                card_ = create_card('Uno', G.pack_card,nil,nil,true,true,nil,'whiteem_Uno')
+            else
+                return { set = "Playing Card", area = G.pack_cards, skip_materialize = true }
+            end
+        else
+            if pseudorandom('uno') > 0.8 then 
+                card_ = create_card('Uno', G.pack_card,nil,nil,true,true,nil,'whiteem_Uno')
+            else
+                return { set = "Playing Card", area = G.pack_cards, skip_materialize = true }
+            end        
+        end
+        return card_
     end,
 })
 
@@ -65,10 +82,10 @@ SMODS.Booster ({
     kind = 'whiteem_Uno',
     group_key = "p_uno_pack",
     pos = { x = 3, y = 1 },
-    config = { extra = 3, choose = 1 },
+    config = { extra = 4, choose = 1, uno = false },
 
-    cost = 7,
-    weight = 0.5,
+    cost = 6,
+    weight = 0.4,
     draw_hand = true,
 
     discovered = true,
@@ -79,7 +96,8 @@ SMODS.Booster ({
         ['text']={
             "Choose {C:attention}#1#{} of up to",
             "{C:attention}#2# {C:mult}Uno{} cards to",
-            "be used immediately",
+            "be used immediately or {C:attention}Playing{} cards",
+            "to add to your deck",
         },
     },
     
@@ -113,7 +131,23 @@ SMODS.Booster ({
     end,
     
     create_card = function(self, card, i)
-        return create_card('Uno', G.pack_card,nil,nil,true,true,nil,'whiteem_Uno')
+        local card_
+        --1/2 to have a uno card then 1/5 if there's already one
+        if not card.ability.uno then 
+            if pseudorandom('uno') > 0.5 then
+                card.ability.uno = true
+                card_ = create_card('Uno', G.pack_card,nil,nil,true,true,nil,'whiteem_Uno')
+            else
+                return { set = "Playing Card", area = G.pack_cards, skip_materialize = true }
+            end
+        else
+            if pseudorandom('uno') > 0.8 then 
+                card_ = create_card('Uno', G.pack_card,nil,nil,true,true,nil,'whiteem_Uno')
+            else
+                return { set = "Playing Card", area = G.pack_cards, skip_materialize = true }
+            end        
+        end
+        return card_
     end,
 })
 
@@ -125,10 +159,10 @@ SMODS.Booster ({
     kind = 'whiteem_Uno',
     group_key = "p_uno_pack",
     pos = { x = 4, y = 1 },
-    config = { extra = 4, choose = 2 },
+    config = { extra = 5, choose = 2, uno = false },
 
-    cost = 9,
-    weight = 0.2,
+    cost = 8,
+    weight = 0.15,
     draw_hand = true,
 
     discovered = true,
@@ -139,7 +173,8 @@ SMODS.Booster ({
         ['text']={
             "Choose {C:attention}#1#{} of up to",
             "{C:attention}#2# {C:mult}Uno{} cards to",
-            "be used immediately",
+            "be used immediately or {C:attention}Playing{} cards",
+            "to add to your deck",
         },
     },
     
@@ -173,7 +208,23 @@ SMODS.Booster ({
     end,
     
     create_card = function(self, card, i)
-        return create_card('Uno', G.pack_card,nil,nil,true,true,nil,'whiteem_Uno')
+        local card_
+        --1/2 to have a uno card then 1/5 if there's already one
+        if not card.ability.uno then 
+            if pseudorandom('uno') > 0.5 then
+                card.ability.uno = true
+                card_ = create_card('Uno', G.pack_card,nil,nil,true,true,nil,'whiteem_Uno')
+            else
+                return { set = "Playing Card", area = G.pack_cards, skip_materialize = true }
+            end
+        else
+            if pseudorandom('uno') > 0.8 then 
+                card_ = create_card('Uno', G.pack_card,nil,nil,true,true,nil,'whiteem_Uno')
+            else
+                return { set = "Playing Card", area = G.pack_cards, skip_materialize = true }
+            end        
+        end
+        return card_
     end,
 })
 

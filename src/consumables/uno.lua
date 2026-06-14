@@ -19,37 +19,31 @@ SMODS.Consumable{
 
     config = {
         extra = {
-            plus = 2
+            plus = 2,
+            max = 2
         }
     },
     
     loc_txt={
         ['name'] = '+2 Card',
         ['text'] = {
-            "Increase rank of",
-            "a selected card by {C:attention}#1#",
+            "Increases rank of",
+            "{C:attention}#2#{} selected cards",
+            "by {C:attention}#1#",
         }
     },
-
---alt
-    -- loc_txt={
-    --     ['name'] = '+2 Card',
-    --     ['text'] = {
-    --         "Get 1 copie of {C:attention}#1#",
-    --         "Selected Cards",
-    --     }
-    -- },
 
     loc_vars = function(self,info_queue,card)
         return {
             vars = {
-                card.ability.extra.plus
+                card.ability.extra.plus,
+                card.ability.extra.max
             }
         } 
     end,
 
     can_use = function(self, card)
-        return G.hand and #G.hand.highlighted == 1
+        return G.hand and #G.hand.highlighted == card.ability.extra.max
     end,
 
     use = function(self, card, area, copier)
@@ -122,90 +116,170 @@ SMODS.Consumable{
     unlocked = true,
     discovered = true,
 
-    config = {
-        extra = {
-            minus = 1
-        }
-    },
+    config = { max_highlighted = 2, min_highlighted = 2 },      
     
     loc_txt={
         ['name'] = 'Reverse Card',
         ['text'] = {
-            "Decrease the rank of",
-            "a selected card by {C:attention}#1#",
+            "Select {C:attention}#1#{} cards,",
+            "{C:attention}Increase{} the rank of the {C:attention}left{} card",
+            "{C:attention}Decrease{} the rank of the {C:attention}right{} card",
         }
     },
 
     loc_vars = function(self,info_queue,card)
         return {
             vars = {
-                card.ability.extra.minus
+                card.ability.max_highlighted
             }
         }
     end,
 
-    can_use = function (self, card)
-        return G.hand and #G.hand.highlighted == 1
+    -- can_use = function (self, card)
+    --     return G.hand and #G.hand.highlighted == card.ability.max_highlighted 
+    -- end,
+
+    use = function(self, card, area, copier)
+        if G.hand.highlighted and #G.hand.highlighted == 2 then
+            local rightmost = G.hand.highlighted[1]
+
+            local base_percent = 1.15
+            local sound = 'card1'
+            local extra = nil
+            for i=1, #G.hand.highlighted do 
+                if G.hand.highlighted[i].T.x > rightmost.T.x then 
+                    rightmost = G.hand.highlighted[i] 
+                end 
+            end
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after', 
+                delay = 0.4, 
+                func = function()
+                    play_sound('tarot1')
+                    card:juice_up(0.3, 0.5)
+                    return true 
+                end 
+            }))
+            delay(0.2)
+            for i=1, #G.hand.highlighted do
+                local percent = nil
+                percent = base_percent - (i-0.999)/(#G.hand.highlighted-0.998)*0.3
+                G.E_MANAGER:add_event(Event({
+                    trigger = 'after',
+                    delay = 0.15,
+                    func = function() 
+                        G.hand.highlighted[i]:flip()
+                        play_sound(sound, percent, extra)
+                        G.hand.highlighted[i]:juice_up(0.3, 0.3)
+                        return true 
+
+                    end 
+                }))
+            end
+            delay(0.2)
+            for i = 1, #G.hand.highlighted do
+                G.E_MANAGER:add_event(Event({
+                    trigger = 'after',
+                    delay = 0.1,
+                    func = function()
+                        if G.hand.highlighted[i] ~= rightmost then
+                            assert(SMODS.modify_rank(G.hand.highlighted[i], 1))
+                        else
+                            assert(SMODS.modify_rank(G.hand.highlighted[i], -1))
+                        end
+                        return true
+                    end
+                }))
+            end
+            
+            sound = 'tarot2' 
+            base_percent = 0.85
+            extra = .6
+
+            for i=1, #G.hand.highlighted do
+                local percent = nil
+                percent = base_percent + (i-0.999)/(#G.hand.highlighted-0.998)*0.3
+                G.E_MANAGER:add_event(Event({
+                    trigger = 'after',
+                    delay = 0.15,
+                    func = function() 
+                        G.hand.highlighted[i]:flip()
+                        play_sound(sound, percent, extra)
+                        G.hand.highlighted[i]:juice_up(0.3, 0.3)
+                        return true      
+                    end 
+                }))
+            end
+
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.5,
+                func = function() 
+                    G.hand:unhighlight_all()
+                    return true      
+                end 
+            }))
+        end
     end,
 
-    use = function (self, card, area, copier)
-        G.E_MANAGER:add_event(Event({
-            trigger = 'after',
-            delay = 0.4,
-            func = function()
-                play_sound('tarot1')
-                card:juice_up(0.3, 0.5)
-                return true
-            end
-        }))
-        for i = 1, #G.hand.highlighted do
-            local percent = 1.15 - (i - 0.999) / (#G.hand.highlighted - 0.998) * 0.3
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.15,
-                func = function()
-                    G.hand.highlighted[i]:flip()
-                    play_sound('card1', percent)
-                    G.hand.highlighted[i]:juice_up(0.3, 0.3)
-                    return true
-                end
-            }))
-        end
-        delay(0.2)
-        for i = 1, #G.hand.highlighted do
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.1,
-                func = function()
-                    -- SMODS.modify_rank will increment/decrement a given card's rank by a given amount
-                    assert(SMODS.modify_rank(G.hand.highlighted[i], -card.ability.extra.minus))
-                    return true
-                end
-            }))
-        end
-        for i = 1, #G.hand.highlighted do
-            local percent = 0.85 + (i - 0.999) / (#G.hand.highlighted - 0.998) * 0.3
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.15,
-                func = function()
-                    G.hand.highlighted[i]:flip()
-                    play_sound('tarot2', percent, 0.6)
-                    G.hand.highlighted[i]:juice_up(0.3, 0.3)
-                    return true
-                end
-            }))
-        end
-        G.E_MANAGER:add_event(Event({
-            trigger = 'after',
-            delay = 0.2,
-            func = function()
-                G.hand:unhighlight_all()
-                return true
-            end
-        }))
-        delay(0.5)
-    end,
+    -- use = function (self, card, area, copier)
+    --     G.E_MANAGER:add_event(Event({
+    --         trigger = 'after',
+    --         delay = 0.4,
+    --         func = function()
+    --             play_sound('tarot1')
+    --             card:juice_up(0.3, 0.5)
+    --             return true
+    --         end
+    --     }))
+    --     for i = 1, #G.hand.highlighted do
+    --         local percent = 1.15 - (i - 0.999) / (#G.hand.highlighted - 0.998) * 0.3
+    --         G.E_MANAGER:add_event(Event({
+    --             trigger = 'after',
+    --             delay = 0.15,
+    --             func = function()
+    --                 G.hand.highlighted[i]:flip()
+    --                 play_sound('card1', percent)
+    --                 G.hand.highlighted[i]:juice_up(0.3, 0.3)
+    --                 return true
+    --             end
+    --         }))
+    --     end
+    --     delay(0.2)
+    --     for i = 1, #G.hand.highlighted do
+    --         G.E_MANAGER:add_event(Event({
+    --             trigger = 'after',
+    --             delay = 0.1,
+    --             func = function()
+    --                 -- SMODS.modify_rank will increment/decrement a given card's rank by a given amount
+    --                 assert(SMODS.modify_rank(G.hand.highlighted[i], -card.ability.extra.minus))
+    --                 return true
+    --             end
+    --         }))
+    --     end
+    --     for i = 1, #G.hand.highlighted do
+    --         local percent = 0.85 + (i - 0.999) / (#G.hand.highlighted - 0.998) * 0.3
+    --         G.E_MANAGER:add_event(Event({
+    --             trigger = 'after',
+    --             delay = 0.15,
+    --             func = function()
+    --                 G.hand.highlighted[i]:flip()
+    --                 play_sound('tarot2', percent, 0.6)
+    --                 G.hand.highlighted[i]:juice_up(0.3, 0.3)
+    --                 return true
+    --             end
+    --         }))
+    --     end
+    --     G.E_MANAGER:add_event(Event({
+    --         trigger = 'after',
+    --         delay = 0.2,
+    --         func = function()
+    --             G.hand:unhighlight_all()
+    --             return true
+    --         end
+    --     }))
+    --     delay(0.5)
+    -- end,
 }
 
 -- Skip Card
@@ -246,15 +320,6 @@ SMODS.Consumable{
     end,
 
     use = function (self, card, area, copier)
-        -- local tag_pool = get_current_pool('Tag')
-        -- local selected_tag = pseudorandom_element(tag_pool, 'whiteem')
-        -- local it = 1
-        -- while selected_tag == 'UNAVAILABLE' do
-        --     it = it + 1
-        --     selected_tag = pseudorandom_element(tag_pool, 'whiteem' .. it)
-        -- end
-        -- add_tag(Tag(selected_tag, false, 'Small'))
-
         G.E_MANAGER:add_event(Event({
             func = (function()
                 add_tag(Tag(pseudorandom_element(card.ability.extra.p_tags, pseudoseed('unoskip'))))
@@ -272,57 +337,6 @@ SMODS.Consumable{
     set = 'Uno',
     atlas = 'others',
     pos = { x= 4, y=0},
-
-    -- config = {
-    --     extra = {
-    --         number = 2,
-    --         level = 1
-    --     }
-    -- },
-
-    -- loc_vars = function (self, info_queue, card)
-    --     return{
-    --         vars = {
-    --             card.ability.extra.number,
-    --             card.ability.extra.level
-    --         }
-    --     } 
-    -- end,
-    
-    -- loc_txt={
-    --     ['name'] = 'Wild Card',
-    --     ['text'] = {
-    --         "Upgrade your {C:attention}#1#",
-    --         "{C:attention}most{} played hands",
-    --         "by {C:attention}#2#{} levels",
-    --     }
-    -- },
-
-    -- can_use = function(self,card)
-    --     return true
-    -- end,
-
-    -- use = function (self,card,area,copier)
-    --     local _hands = {}
-    --     local hand_list = {}
-        
-    --     -- Single loop to collect all hands with their play counts
-    --     for hand_key, hand in pairs(G.GAME.hands) do
-            
-    --         table.insert(hand_list, {key = hand_key, played = hand.played})
-    --     end
-        
-    --     -- Sort by play count (highest first)
-    --     table.sort(hand_list, function(a, b) return a.played > b.played end)
-        
-    --     -- Take the top N hands
-    --     for i = 1, math.min(card.ability.extra.number, #hand_list) do
-    --         table.insert(_hands, hand_list[i].key)
-    --     end
-        
-    --     print('hands :', _hands)
-    --     SMODS.upgrade_poker_hands({hands=_hands, level_up=card.ability.extra.level, from = card})
-    -- end
         
     unlocked = true,
     discovered = true,
