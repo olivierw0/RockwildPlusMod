@@ -15,6 +15,8 @@ SMODS.Joker {
     unlocked = true,
     discovered = true,
 
+    blueprint_compat = false,
+
     loc_vars = function(self, info_queue, card)
         info_queue[#info_queue+1] = G.P_CENTERS.m_steel
         info_queue[#info_queue+1] = G.P_CENTERS.m_gold
@@ -39,7 +41,6 @@ SMODS.Joker {
             end
             for _, v in ipairs(those_cards) do 
                 v:set_ability(G.P_CENTERS["m_stone"],false,1)
-                -- add SFX PSSSCH metal in water
                 juice_card(v)
                 SMODS.calculate_effect({message = "Melts...", colour = HEX("FFC084")}, v)
             end            

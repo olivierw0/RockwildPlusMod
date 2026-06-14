@@ -6,7 +6,6 @@ SMODS.Joker {
     config={
         extra = {
             xchips_mod = 0.25,
-            -- xchips_minus_mod = 0.5,
             xchips = 0.5
         }
     },
@@ -24,27 +23,12 @@ SMODS.Joker {
         return {
             vars = {
                 card.ability.extra.xchips_mod,
-                -- card.ability.extra.xchips_minus_mod,
                 card.ability.extra.xchips
             }
         }
     end,
 
     calculate = function(self,card,context)
-
-        -- if context.individual and not context.blueprint and
-        --     not context.other_card.debuff and SMODS.has_enhancement(context.other_card,'m_stone')
-        -- then
-        --     card.ability.extra.xchips = card.ability.extra.xchips - card.ability.extra.xchips_minus_mod
-        --     if card.ability.extra.xchips < 0.5 then 
-        --         card.ability.extra.xchips = 0.5
-        --     end
-        --     return {
-        --         message = localize { type = 'variable', key = 'a_xchips', vars = { card.ability.extra.xchips } },
-        --         colour = G.C.BLUE,
-        --         delay = 0.45
-        --     }
-        -- end
 
         if context.discard and not context.other_card.debuff and
             SMODS.has_enhancement(context.other_card,'m_stone') and not context.blueprint 
@@ -59,7 +43,6 @@ SMODS.Joker {
 
         if context.ante_end and context.modify_ante and not context.blueprint then
             card.ability.extra.xchips = 0.5
-            print("end of ante")
             return{
                 message = localize('k_reset'),
                 colour = G.C.BLUE,
@@ -72,14 +55,4 @@ SMODS.Joker {
             }
         end
     end,
-
-    -- in_pool = function(self, args) 
-    --     local stone_cpt = 0
-    --     for _, playing_card in ipairs(G.playing_cards or {}) do
-    --         if SMODS.has_enhancement(playing_card, 'm_stone') then
-    --             stone_cpt = stone_cpt + 1
-    --         end
-    --     end
-    --     if stone_cpt >= 2 then return true else return false end
-    -- end
 }

@@ -47,5 +47,22 @@ SMODS.Joker{
                 return true
             end
         }))
+    end,
+
+    calculate = function (self, card, context)
+        if context.buying_card and context.card.ability.set == "Voucher" then
+            if context.card.config.center.key == "v_clearance_sale" or context.card.config.center.key == "v_liquidation" then
+                G.E_MANAGER:add_event(Event({
+                    trigger = 'after',
+                    func = function()
+                        G.GAME.discount_percent = G.GAME.discount_percent + card.ability.extra.percent
+                        for _, v in pairs(G.I.CARD) do
+                            if v.set_cost then v:set_cost() end
+                        end
+                        return true
+                    end
+                }))
+            end
+        end
     end
 }
